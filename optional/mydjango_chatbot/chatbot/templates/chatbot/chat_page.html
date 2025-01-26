@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>ChatGPT 대화 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .chat-container {
+            margin-top: 20px;
+        }
+        .chat-bubble {
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .chat-bubble.user {
+            background-color: #cce5ff;
+            align-self: flex-end;
+        }
+        .chat-bubble.assistant {
+            background-color: #f8f9fa;
+        }
+        .chat-row {
+            display: flex;
+            flex-wrap: wrap;
+            clear: both;
+        }
+        .chat-row.user {
+            justify-content: flex-end;
+        }
+        .chat-row.assistant {
+            justify-content: flex-start;
+        }
+        .role-title {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .chat-input {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">MyDjangoChatbot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon">≡</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">홈</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/chatbot/">챗봇</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">관리자</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container chat-container">
+        <h1 class="my-4">챗봇 대화</h1>
+        <div>
+            {% for msg in conversation %}
+                <div class="chat-row {{ msg.role }}">
+                    <div class="chat-bubble {{ msg.role }}">
+                        {% if msg.role == 'user' %}
+                            <span class="role-title">{{ username }}:</span> {{ msg.content }}
+                        {% else %}
+                            <span class="role-title">{{ msg.role|title }}:</span> {{ msg.content }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="chat-input">
+            <form method="POST" class="my-3">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" name="user_input" placeholder="무엇이든 물어보세요..." required>
+                    <button class="btn btn-primary" type="submit">전송</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
